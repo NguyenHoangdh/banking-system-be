@@ -1,4 +1,4 @@
 package com.nghoang.banking.service.impl;
 
-public class UserServiceImpl {
+public class PermissionService {
 }
