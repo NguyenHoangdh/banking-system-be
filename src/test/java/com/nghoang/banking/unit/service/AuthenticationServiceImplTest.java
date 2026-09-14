@@ -244,8 +244,6 @@ public class AuthenticationServiceImplTest {
     @Test
     void test_logout_malformedToken() {
         logoutRequest.setToken("not.a.jwt.at.all");
-
-//        với ParseException, thường không có gì thêm để assert vì đã biết nó là ParseException rồi. Không giống AppException có thêm field errorCode để phân biệt các loại lỗi khác nhau nên ko cần verify nó
         assertThrows(ParseException.class, () -> authenticationService.logout(logoutRequest));
         verifyNoInteractions(invalidatedTokenRepository);
     }

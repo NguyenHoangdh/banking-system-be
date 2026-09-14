@@ -20,14 +20,14 @@ import java.time.LocalDateTime;
 @Table(name = "transactions")
 public class Transaction {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID) // chuỗi ngẫu nhiên 36 ký tự giúp tránh lộ thng tin đã có bao nhiêu giao dịch (nếu dùng ID tự tăng)
+    @GeneratedValue(strategy = GenerationType.UUID)
     String transactionId;
     String transactionType;
     BigDecimal amount;
     String accountNumber;
     String status;
     @CreationTimestamp
-    LocalDateTime createAt; //có giờ phút giây, ko kèm múi giờ (phuf hợp nếu hệ thống dùng trong 1 nội địa), Instant thì lưu chuẩn thời gian UTC
+    LocalDateTime createAt;
     @UpdateTimestamp
     LocalDateTime modifiedAt;
 }

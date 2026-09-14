@@ -28,17 +28,17 @@ public class SecurityConfig {
             "/swagger-ui.html"};
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, CustomJwtDecoder customJwtDecoder) {
-        httpSecurity //đóng vai trò
+        httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll() //ai cũng vào được
+                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()
                         .requestMatchers(SWAGGER_ENDPOINT).permitAll()
-                        .anyRequest().authenticated()) //đã login là va được
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
-                                .decoder(customJwtDecoder) //truyền công cụ giải mã
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())) //Kích hoạt việc đăng ký BearerTokenAuthenticationFilter và JwtAuthenticationProvider vào chuỗi lọc của Spring Security (tương ứng Bước 2, 3, 4, 7, 8, 9).
+                                .decoder(customJwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
         return httpSecurity.build();
     }

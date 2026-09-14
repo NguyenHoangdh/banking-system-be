@@ -51,7 +51,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         if (!authenticated) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
-        try { //xử lý nếu lỗi email sẽ throw exception mặc dù credentials đúng
+        try {
             EmailDetails loginAlert = EmailDetails.builder()
                     .subject("You're logged in")
                     .recipient(loginDto.getEmail())
@@ -76,7 +76,6 @@ public class AuthenticationServiceImpl implements AuthenticationService{
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
-//        Payload payload = new Payload(claimsSet.toJSONObject()); nếu dùng JWSObject
         SignedJWT signedJWT = new SignedJWT(header, claimsSet);
         signedJWT.sign(new MACSigner(SIGNER_KEY));
         return signedJWT.serialize();
@@ -105,8 +104,6 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY);
         SignedJWT signedJWT = SignedJWT.parse(token);
-        //SignedJWT là subClass của JWSObject, được thiết kế chuyên biệt cho JWT
-        //Tự động parse payload thành JWTClaimsSet → dùng thẳng . đc
         var verify = signedJWT.verify(verifier);
         if (!verify) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
@@ -129,7 +126,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
                     .id(signedJWT.getJWTClaimsSet().getJWTID())
                     .expiryTime(signedJWT.getJWTClaimsSet().getExpirationTime())
                     .build());
-        } catch (AppException e) { //xử lý việc logout token expired bị ném lỗi
+        } catch (AppException e) {
             if (!e.getErrorCode().equals(ErrorCode.UNAUTHENTICATED)) {
                 throw e;
             }
@@ -139,7 +136,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
     private String buildScope(User user) {
         if (CollectionUtils.isEmpty(user.getRoles())) return "";
-        Set<String> authorities = new LinkedHashSet<>(); //tránh thêm trùng lặp permission của roles
+        Set<String> authorities = new LinkedHashSet<>();
         if (!CollectionUtils.isEmpty(user.getRoles())) {
             user.getRoles().forEach(role -> {
                 authorities.add("ROLE_" + role.getName());

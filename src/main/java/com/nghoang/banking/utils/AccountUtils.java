@@ -32,7 +32,6 @@ public class AccountUtils {
         int min = 100000;
         int max = 999999;
         int ranNumber = (int) Math.floor(Math.random() * (max - min + 1) + min);
-        //convert the current year and ranNumber to strings then concentrate
         String year = String.valueOf(currentYear);
         String ranomNumber = String.valueOf(ranNumber);
         StringBuilder accountNumber = new StringBuilder();

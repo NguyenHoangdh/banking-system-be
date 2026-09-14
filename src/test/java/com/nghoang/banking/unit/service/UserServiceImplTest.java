@@ -319,7 +319,6 @@ public class UserServiceImplTest {
     void test_balanceEnquire_shouldThrowException() {
         user.setStatus("INACTIVE");
 
-//        when(mockUser.getStatus()).thenReturn("INACTIVE");
         Authentication authentication = mock(Authentication.class);
         SecurityContext securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
@@ -378,7 +377,6 @@ public class UserServiceImplTest {
     void test_credit_accountNotActive() {
         user.setStatus("INACTIVE");
         when(userRepository.findByAccountNumberWithLock(creditRequest.getAccountNumber())).thenReturn(Optional.of(user));
-//        when(userService.credit(creditRequest)).thenReturn()
 
         AppException appException = assertThrows(AppException.class, () -> userService.credit(creditRequest));
         assertEquals(ErrorCode.ACCOUNT_NOT_ACTIVE, appException.getErrorCode());
@@ -407,16 +405,13 @@ public class UserServiceImplTest {
 
     @Test
     void test_credit_verifyNoSideEffectsOnFailure() {
-        // GIVEN - tài khoản hợp lệ, nhưng save() ném exception giữa chừng
         user.setStatus("ACTIVE");
         user.setAccountBalance(BigDecimal.ZERO);
         when(userRepository.findByAccountNumberWithLock(creditRequest.getAccountNumber())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenThrow(new RuntimeException("DB error"));
 
-        // WHEN
         assertThrows(RuntimeException.class, () -> userService.credit(creditRequest));
 
-        // VERIFY - saveTransaction và publishEvent không được gọi khi save thất bại
         verify(userRepository, times(1)).save(any(User.class));
         verify(transactionService, never()).saveTransaction(any());
         verify(applicationEventPublisher, never()).publishEvent(any());
@@ -524,16 +519,13 @@ public class UserServiceImplTest {
 
     @Test
     void test_debit_verifyNoSideEffectsOnFailure() {
-        // GIVEN - tài khoản hợp lệ, nhưng save() ném exception giữa chừng
         user.setAccountBalance(BigDecimal.valueOf(50000));
         debitRequest.setAmount(BigDecimal.valueOf(10000));
         when(userRepository.findByAccountNumberWithLock(debitRequest.getAccountNumber())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenThrow(new RuntimeException("DB error"));
 
-        // WHEN
         assertThrows(RuntimeException.class, () -> userService.debit(debitRequest));
 
-        // VERIFY - saveTransaction và publishEvent không được gọi khi save thất bại
         verify(userRepository, times(1)).save(any(User.class));
         verify(userRepository, times(1)).findByAccountNumberWithLock(debitRequest.getAccountNumber());
         verify(transactionService, never()).saveTransaction(any());
@@ -574,7 +566,7 @@ public class UserServiceImplTest {
         assertEquals(ErrorCode.ACCOUNT_NOT_ACTIVE, appException.getErrorCode());
 
         verify(userRepository, times(1)).findUserByEmailWithLock("lea@gmail.com");
-        verify(userRepository, never()).findByAccountNumberWithLock(any()); //check method transfer dừng lại sớm khi source ko active
+        verify(userRepository, never()).findByAccountNumberWithLock(any());
         verify(userRepository, never()).save(any());
         verify(applicationEventPublisher, never()).publishEvent(any());
         verify(transactionService, never()).saveTransaction(any());
@@ -705,7 +697,6 @@ public class UserServiceImplTest {
 
     @Test
     void test_transfer_verifyNoSideEffectsOnFailure() {
-        // GIVEN - tài khoản hợp lệ, nhưng save() ném exception giữa chừng
         user.setAccountBalance(BigDecimal.valueOf(50000));
         transferRequest.setDestinationAccountNumber("202513211");
         transferRequest.setAmount(BigDecimal.valueOf(10000));
@@ -719,11 +710,8 @@ public class UserServiceImplTest {
         when(userRepository.findByAccountNumberWithLock(transferRequest.getDestinationAccountNumber())).thenReturn(Optional.of(destinationUser));
         when(userRepository.save(any(User.class))).thenThrow(new RuntimeException("DB error"));
 
-        // WHEN
         assertThrows(RuntimeException.class, () -> userService.transfer(transferRequest));
 
-
-        // VERIFY - saveTransaction và publishEvent không được gọi khi save thất bại
         verify(userRepository, times(1)).save(any(User.class));
         verify(userRepository, times(1)).findUserByEmailWithLock("lea@gmail.com");
         verify(userRepository, times(1)).findByAccountNumberWithLock(transferRequest.getDestinationAccountNumber());

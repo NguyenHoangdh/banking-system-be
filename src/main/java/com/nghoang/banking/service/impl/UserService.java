@@ -20,6 +20,4 @@ public interface UserService {
     BankResponse debit(DebitRequest request);
     BankResponse transfer(TransferRequest request);
 
-//    BankResponse nameEnquire(EnquiryRequest build);
-
 }

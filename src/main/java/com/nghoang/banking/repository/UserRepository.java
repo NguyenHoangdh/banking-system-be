@@ -23,7 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT u FROM User u WHERE u.email = :email")
-    //SELECT * FROM users WHERE email = 'hoang@gmail.com' FOR UPDATE; lock để thực hiện phần for update
     Optional<User> findUserByEmailWithLock(@Param("email") String email);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)

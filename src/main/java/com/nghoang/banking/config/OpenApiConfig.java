@@ -24,7 +24,6 @@ import java.util.List;
 @Configuration
 @ConfigurationProperties(prefix = "open.api")
 public class OpenApiConfig {
-    //định nghĩa 2 thứ
     private String title;
     private String description;
     private String version;
@@ -57,7 +56,6 @@ public class OpenApiConfig {
                 .components(new Components().addSecuritySchemes("BearerAuth", securityScheme));
     }
 
-    // Nhóm 1: Tất cả API (mặc định xem toàn bộ)
     @Bean
     public GroupedOpenApi allApi() {
         return GroupedOpenApi.builder()
@@ -66,7 +64,6 @@ public class OpenApiConfig {
                 .build();
     }
 
-    // Nhóm 2: Quản lý người dùng & Giao dịch Ngân hàng
     @Bean
     public GroupedOpenApi userAndBankingApi() {
         return GroupedOpenApi.builder()
@@ -75,7 +72,6 @@ public class OpenApiConfig {
                 .build();
     }
 
-    // Nhóm 3: Xác thực & Phân quyền (Auth, Role, Permission)
     @Bean
     public GroupedOpenApi authAndSecurityApi() {
         return GroupedOpenApi.builder()

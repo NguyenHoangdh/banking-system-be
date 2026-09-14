@@ -18,7 +18,4 @@ public class EmailServiceListener {
     public void handleSendEmail(EmailDetails emailDetails) {
         emailService.sendEmail(emailDetails);
     }
-//   Tầng Service: Đã làm xong toàn bộ việc "soạn thảo văn bản" (bao gồm nội dung cộng/trừ tiền).
-//  Class EmailDetails: đóng vai trò là "phong bì thư" chứa nội dung đó.
-//  Class EmailEventListener: đóng vai trò là "người đưa thư" — lấy phong bì EmailDetails ra và gửi đi.
 }

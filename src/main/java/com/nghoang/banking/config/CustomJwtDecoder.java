@@ -25,8 +25,6 @@ public class CustomJwtDecoder implements JwtDecoder {
 
     @Override
     public Jwt decode(String token) throws JwtException {
-        //b1: check token đã logout/timeout chưa
-        //b2: giải mã/check sign
         try {
             var response = authenticationService.introspect(IntrospectRequest
                     .builder()
@@ -41,7 +39,7 @@ public class CustomJwtDecoder implements JwtDecoder {
             throw new JwtException("Token introspect failed", e);
         }
         if (Objects.isNull(nimbusJwtDecoder)) {
-            SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(StandardCharsets.UTF_8), "HS512"); //nếu ko chỉ định charset để đảm bảo nhất quán khi deploy lên các môi trường khác, nếu ko nhất quán thì token ký ở windows có thể ko verify được ở linux
+            SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(StandardCharsets.UTF_8), "HS512");
             nimbusJwtDecoder = NimbusJwtDecoder
                     .withSecretKey(secretKeySpec)
                     .macAlgorithm(MacAlgorithm.HS512)

@@ -37,7 +37,6 @@ public class BankStatement {
     UserRepository userRepository;
     EmailService emailService;
 
-//      System.getProperty("java.io.tmpdir") — JVM tự trả về thư mục temp của hệ thống hiện tại,  File.separator — ký tự phân cách đường dẫn tự động theo OS:
     private static final String FILE = System.getProperty("java.io.tmpdir") + File.separator + "BankingStatement.pdf";
 
 
@@ -51,22 +50,17 @@ public class BankStatement {
         Document document = new Document(statementSize, 0,0,0,0);
         log.info("Setting size of document");
 
-// outputStream là cái ống nối document (trong RAM) với file PDF (trên disk). Khi document.close(), iText flush toàn bộ nội dung qua ống đó xuống file
         try (OutputStream outputStream = new FileOutputStream(FILE)) {
-            PdfWriter.getInstance(document, outputStream); //getInstance là hàm dùng để lắng nghe mọi thay đổi trên document xong chuyển thành file pdf rồi đẩy vào outputStream
+            PdfWriter.getInstance(document, outputStream);
             document.open();
 
-            //thiết kế khuôn
-            PdfPTable bankInfoTable = new PdfPTable(1); //tạo bảng này có 1 cột
-
-            //thiết kế viên gạch
+            PdfPTable bankInfoTable = new PdfPTable(1);
             PdfPCell bankName = new PdfPCell(new Phrase("Banking App"));
             bankName.setBackgroundColor(BaseColor.BLUE);
             bankName.setPadding(20f);
 
             PdfPCell bankAddress = new PdfPCell(new Phrase("280, An Duong Vuong"));
 
-            //đặt gạch vào khuôn
             bankInfoTable.addCell(bankName);
             bankInfoTable.addCell(bankAddress);
 

@@ -14,9 +14,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-//keep lại những token đã logout
 public class InvalidatedToken {
     @Id
-    String id; //claim jit của token
-    Date expiryTime; //keep tgian để khi đạt expiration time thì ra remove nó (dùng những job chạy định kì 1 ngày/lần)
+    String id;
+    Date expiryTime;
 }

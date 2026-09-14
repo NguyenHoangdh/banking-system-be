@@ -10,7 +10,7 @@ public class DobValidator implements ConstraintValidator<DobConstraint, LocalDat
     private int min;
     @Override
     public boolean isValid(LocalDate value, ConstraintValidatorContext constraintValidatorContext) {
-        if (value == null) {//mỗi anotation chỉ nên xử lý 1 constrain nhất định => cũng giống nguyên tắc S => việc null hay ko nên để @notnull xử lý
+        if (value == null) {
             return true;
         }
         long years = ChronoUnit.YEARS.between(value, LocalDate.now());
@@ -19,7 +19,6 @@ public class DobValidator implements ConstraintValidator<DobConstraint, LocalDat
     }
 
     @Override
-    //dùng để get thông số của annotation đó
     public void initialize(DobConstraint constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
         min = constraintAnnotation.min();

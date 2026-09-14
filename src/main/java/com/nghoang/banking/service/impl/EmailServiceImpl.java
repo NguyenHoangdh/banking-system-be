@@ -27,7 +27,7 @@ public class EmailServiceImpl implements EmailService{
     final JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
-    String senderEmail; //ko tương thích với final của lombok
+    String senderEmail;
 
     @Override
     public void sendEmail(EmailDetails emailDetails) {
@@ -46,10 +46,10 @@ public class EmailServiceImpl implements EmailService{
 
     @Override
     public void sendEmailWithAttachment(EmailDetails emailDetails) {
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage(); //là object đc gửi đi, đang là bì thư rỗng, chưa có nội dung
-        MimeMessageHelper mimeMessageHelper; //như 1 thư ký giúp điền các phần vào bì thư rỗng
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper;
         try {
-            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true); //true là tham số bắt buộc nếu muốn gửi attach file, multipart = true giúp chia email thành nhiều phần (MIME parts): 1 phần chứa text/html, 1 phần chứa file đính kèm
+            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(senderEmail);
             mimeMessageHelper.setTo(emailDetails.getRecipient());
             mimeMessageHelper.setText(emailDetails.getMessageBody());
@@ -57,14 +57,9 @@ public class EmailServiceImpl implements EmailService{
 
 
             FileSystemResource file = new FileSystemResource(new File(emailDetails.getAttachment()));
-            if (!file.exists()) { //check file ko tồn tại trên disk
+            if (!file.exists()) {
                 throw new AppException(ErrorCode.ATTACHMENT_NOT_FOUND);
             }
-//              - FILE = "D:\\DSA\\MyStatement.pdf" → chỉ là string đường dẫn
-//  - emailDetails.setAttachment(FILE) → lưu cái string đó vào emailDetails
-//  - emailDetails.getAttachment() → lấy lại string "D:\\DSA\\MyStatement.pdf"
-//  - new File("D:\\DSA\\MyStatement.pdf") → tạo Java File object đại diện cho đường dẫn đó, không phải BankStatement object
-//  - new FileSystemResource(file) → wrap tiếp để Spring Mail đọc được nội dung file PDF từ disk
             mimeMessageHelper.addAttachment(file.getFilename(), file);
             javaMailSender.send(mimeMessage);
 

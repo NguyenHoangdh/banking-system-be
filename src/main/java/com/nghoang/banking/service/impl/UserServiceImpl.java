@@ -48,10 +48,9 @@ public class UserServiceImpl implements UserService {
         }
         User user = userMapper.toUser(request);
         String accountNumber;
-        //generate số ko trùng
         do {
             accountNumber = AccountUtils.generateAccountNumber();
-        } while (userRepository.existsByAccountNumber(accountNumber)); //check xem đã có số đó trong db chưa, nếu có thì tạo số mới đến khi ko trùng mới thoát ra vòng lặp
+        } while (userRepository.existsByAccountNumber(accountNumber));
 
         user.setAccountNumber(accountNumber);
         user.setAccountBalance(BigDecimal.valueOf(0));
@@ -60,15 +59,13 @@ public class UserServiceImpl implements UserService {
         var userRole = roleRepository.findById("USER").orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
         user.setRoles(new HashSet<>(Set.of(userRole)));
         User savedUser = userRepository.save(user);
-        String accountName = buildAccountName(savedUser); //ngừa other name null sẽ in ra ko đúng tên
+        String accountName = buildAccountName(savedUser);
         EmailDetails emailDetails = EmailDetails.builder()
                 .recipient(savedUser.getEmail())
                 .subject("ACCOUNT CREATION")
                 .messageBody("CONGRATULATION! YOU ACCOUNT HAS BEEN SUCCESSFULLY CREATED!\n Your account Detail: \n Account Name: " + accountName + "\nAccount number: " + savedUser.getAccountNumber())
                 .build();
-        applicationEventPublisher.publishEvent(emailDetails); //tách việc gửi email ra 1 luồng riêng so với luồng tạo user
-        //ko gọi thẳng hàm emailServiceListener.handleSendEmail(...) vì như vậy sẽ làm tight coupling, UserService phải inject EmailServiceListener, nếu sau này phát sinh thêm gửi SMS, tạo voucher,... sẽ phải quay lại inject thêm => vi phạm O trong SOLID
-        //khi dùng pulishEvent thì ko gọi tên ai, chỉ phát ra 1 thông báo kèm dữ liệu emailDetails => loose coupling, UserService ko cần biết đến có các listener nào, nó chỉ làm đúng nhiệm vụ: tạo tài khoản -> thông báo, khi phát sinh thêm các yêu cầu mới (SMS, gửi voucher,..) chỉ cần viết thêm listener chứ ko sửa code, khi viết thêm listener rồi chỉ cần chạy bình thường thì tất cả listener sẽ được gửi
+        applicationEventPublisher.publishEvent(emailDetails);
         return BankResponse.builder()
                 .code(AccountUtils.ACCOUNT_CREATION_SUCCESS)
                 .message(AccountUtils.ACCOUNT_CREATION_MESSAGE)
@@ -84,7 +81,7 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<List<AccountInfo>> getAllUsers() {
         List<User> users = userRepository.findAll();
-        List<AccountInfo> accountInfos = users.stream().map(userMapper::toAccountInfo).toList(); //.stream() để chuyển List<User> thành Stream<User> để có thể dùng các operation chain như map, filter, collect...
+        List<AccountInfo> accountInfos = users.stream().map(userMapper::toAccountInfo).toList();
 
         return ApiResponse.<List<AccountInfo>>builder()
                 .code(Integer.parseInt(AccountUtils.GET_USER_SUCCESS))
@@ -128,7 +125,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true) //gợi ý cho framework tối ưu hiệu năng và bảo vệ tránh ghi nhầm
+    @Transactional(readOnly = true)
     public BankResponse balanceEnquiry() {
         User user = userRepository.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         if (!user.getStatus().equals("ACTIVE")) {
@@ -183,7 +180,7 @@ public class UserServiceImpl implements UserService {
                 .recipient(user.getEmail())
                 .messageBody("Your account has been add " + request.getAmount() + ". Your account balance currently is: " + user.getAccountBalance())
                 .build();
-        applicationEventPublisher.publishEvent(emailDetails); //
+        applicationEventPublisher.publishEvent(emailDetails);
         return BankResponse.builder()
                 .code(AccountUtils.ACCOUNT_CREDITED_SUCCESS)
                 .message(String.format(AccountUtils.ACCOUNT_CREDITED_SUCCESS_MESSAGE, request.getAmount()))
@@ -203,7 +200,6 @@ public class UserServiceImpl implements UserService {
         if (!user.getStatus().equals("ACTIVE")) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_ACTIVE);
         }
-        //check tiền hiện tại có nhỏ hơn tiền rút ko
 
         BigDecimal availableBalance = user.getAccountBalance();
         BigDecimal debitAmount = request.getAmount();
@@ -239,9 +235,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    //chưa xử lý deadlock tiềm ẩn
     public BankResponse transfer(TransferRequest request) {
-        //sourceAccountNumber đã check khi login r nên ko cần check nữa => hiểu thế này là sai, vì nếu ko check thì khi đăng nhập rồi có thể dùng tùy ý accountNumber của user khác => cần lấy thông tin user từ claims ở SecurityContextHolder
         User sourceAccountUser = userRepository.findUserByEmailWithLock(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         if (!sourceAccountUser.getStatus().equals("ACTIVE")) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_ACTIVE);
@@ -288,8 +282,7 @@ public class UserServiceImpl implements UserService {
                 .build();
         transactionService.saveTransaction(transactionDto1);
         transactionService.saveTransaction(transactionDto2);
-        //xử lý rollback ko gửi email nếu có database fail
-        applicationEventPublisher.publishEvent(new TransferEmailEvent(this, debitAlert, creditAlert)); //đặt trước save db cũng được vì đã có after commit
+        applicationEventPublisher.publishEvent(new TransferEmailEvent(this, debitAlert, creditAlert));
         return BankResponse.builder()
                 .code(AccountUtils.TRANSFER_SUCCESSFUL_CODE)
                 .message(AccountUtils.TRANSFER_SUCCESSFUL_MESSAGE)
@@ -303,7 +296,6 @@ public class UserServiceImpl implements UserService {
     private String buildAccountName(User user) {
         String name = user.getFirstName() + " " + user.getLastName();
         String other = user.getOtherName();
-//        return name + " " + Objects.toString(other, " ").trim(); //thừa dấu cách nếu other name là null
         return (other == null || other.isBlank()) ? name : name + " " + other
                 .trim();
     }
