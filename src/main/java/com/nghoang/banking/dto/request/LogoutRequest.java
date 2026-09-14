@@ -1,8 +1,7 @@
-package com.nghoang.banking.dto;
+package com.nghoang.banking.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 @AllArgsConstructor

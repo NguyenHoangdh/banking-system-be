@@ -1,4 +1,4 @@
-package com.nghoang.banking.dto;
+package com.nghoang.banking.dto.request;
 
 
 import lombok.*;
@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LoginDto {
+public class LoginRequest {
     String email;
     String password;
 }

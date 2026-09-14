@@ -1,9 +1,8 @@
-package com.nghoang.banking.dto;
+package com.nghoang.banking.dto.response;
 
+import com.nghoang.banking.dto.AccountInfo;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor

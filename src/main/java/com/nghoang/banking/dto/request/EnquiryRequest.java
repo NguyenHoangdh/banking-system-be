@@ -1,4 +1,4 @@
-package com.nghoang.banking.dto;
+package com.nghoang.banking.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,5 +10,4 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EnquiryRequest {
     String accountNumber;
-
 }

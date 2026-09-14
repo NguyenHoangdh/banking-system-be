@@ -1,70 +1,79 @@
 package com.nghoang.banking.controller;
 
 
-import com.nghoang.banking.dto.*;
+import com.nghoang.banking.dto.AccountInfo;
+import com.nghoang.banking.dto.ApiResponse;
+import com.nghoang.banking.dto.request.*;
+import com.nghoang.banking.dto.response.BankResponse;
 import com.nghoang.banking.service.impl.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@Tag(name = "User Account Management APIs")
+@Tag(name = "User Account Management APIs", description = "Các API quản lý tài khoản ngân hàng.")
 public class UserController {
     UserService userService;
 
-    @Operation(
-            summary = "Create New User Account",
-            description = "Creating a new user and assigning an account ID"
-    )
-    @ApiResponse(
-            responseCode = "201",
-            description = "Http Status 201 CREATED"
-    )
     @PostMapping
-    public BankResponse create(@RequestBody UserRequest request) {
+    @SecurityRequirements
+    @Operation(summary = "Tạo tài khoản", description = "API tạo tài khoản người dùng.")
+    public BankResponse create(@RequestBody @Valid UserRequest request) {
         return userService.createAccount(request);
     }
 
-    @Operation(
-            summary = "Balance Enquiry",
-            description = "Given an account number, check how mục the user has"
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Http Status 200 SUCCESS"
-    )
+    @Operation(summary = "Cập nhật tài khoản", description = "API cập nhật thông tin tài khoản.")
+    @PutMapping
+    public BankResponse update(@RequestBody @Valid UserUpdateRequest request) {
+        return userService.updateAccount(request);
+    }
+
+    @Operation(summary = "Xem số dư", description = "API xem số dư tài khoản.")
     @GetMapping("/balanceEnquiry")
-    public BankResponse balanceEnquiry(@RequestBody EnquiryRequest request) {
-        return userService.balanceEnquiry(request);
+    public BankResponse balanceEnquiry() { //hoặc để trống
+        return userService.balanceEnquiry();
     }
 
+    @Operation(summary = "Xem tên tài khoản", description = "API xem tên tài khoản.")
     @GetMapping("/nameEnquiry")
-    public String nameEnquiry(@RequestBody EnquiryRequest request) {
-        return  userService.nameEnquiry(request);
+    public BankResponse nameEnquiry(@RequestParam String accountNumber) {
+        return  userService.nameEnquiry(EnquiryRequest.builder()
+                .accountNumber(accountNumber)
+                .build());
     }
 
+    @Operation(summary = "Lấy danh sách khách hàng", description = "API xem danh sách khách hàng của ngân hàng.")
+    @GetMapping("/all")
+    public ApiResponse<List<AccountInfo>> getUsers() {
+        return  userService.getAllUsers();
+    }
+
+    @Operation(summary = "Nạp tiền", description = "API thực hiện cộng tiền vào tài khoản.")
     @PostMapping("/credit")
-    public BankResponse creditAccount(@RequestBody CreditDebitRequest request) {
-        return  userService.creditAccount(request);
+    public BankResponse creditAccount(@RequestBody @Valid CreditRequest request) {
+        return  userService.credit(request);
     }
 
     @PostMapping("/debit")
-    public BankResponse debitAccount(@RequestBody CreditDebitRequest request) {
-        return userService.debitAccount(request);
+    @Operation(summary = "Rút tiền", description = "API thực hiện trừ tiền vào tài khoản.")
+    public BankResponse debitAccount(@RequestBody @Valid DebitRequest request) {
+        return userService.debit(request);
     }
+
 
     @PostMapping("/transfer")
-    public BankResponse transfer(@RequestBody TransferRequest request) {
+    @Operation(summary = "Chuyển tiền", description = "API thực hiện chuyển tiền từ tài khoản chính chủ sang tài khoản người dùng khác.")
+    public BankResponse transfer(@RequestBody @Valid TransferRequest request) {
         return userService.transfer(request);
     }
-
-
 }

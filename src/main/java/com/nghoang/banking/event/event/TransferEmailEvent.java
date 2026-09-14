@@ -1,11 +1,8 @@
-package com.nghoang.banking.event;
+package com.nghoang.banking.event.event;
 
 import com.nghoang.banking.dto.EmailDetails;
-import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
-
-import java.time.Clock;
 
 @Getter
 public class TransferEmailEvent extends ApplicationEvent {

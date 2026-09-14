@@ -1,4 +1,4 @@
-package com.nghoang.banking.dto;
+package com.nghoang.banking.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
