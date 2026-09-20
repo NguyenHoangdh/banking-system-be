@@ -1,7 +1,6 @@
-package com.nghoang.banking.service.impl;
+package com.nghoang.banking.service;
 
 import com.nghoang.banking.dto.TransactionDto;
-import com.nghoang.banking.entity.Transaction;
 import org.springframework.stereotype.Service;
 
 @Service

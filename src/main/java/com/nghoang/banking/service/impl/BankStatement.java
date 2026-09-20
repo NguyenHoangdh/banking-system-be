@@ -12,6 +12,7 @@ import com.nghoang.banking.exception.AppException;
 import com.nghoang.banking.exception.ErrorCode;
 import com.nghoang.banking.repository.TransactionRepository;
 import com.nghoang.banking.repository.UserRepository;
+import com.nghoang.banking.service.EmailService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,7 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;

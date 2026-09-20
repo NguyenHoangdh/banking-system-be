@@ -1,4 +1,4 @@
-package com.nghoang.banking.service.impl;
+package com.nghoang.banking.service;
 
 import com.nghoang.banking.dto.AccountInfo;
 import com.nghoang.banking.dto.ApiResponse;

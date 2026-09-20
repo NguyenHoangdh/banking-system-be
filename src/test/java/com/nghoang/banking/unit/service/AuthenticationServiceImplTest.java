@@ -12,7 +12,7 @@ import com.nghoang.banking.exception.ErrorCode;
 import com.nghoang.banking.repository.InvalidatedTokenRepository;
 import com.nghoang.banking.repository.UserRepository;
 import com.nghoang.banking.service.impl.AuthenticationServiceImpl;
-import com.nghoang.banking.service.impl.EmailService;
+import com.nghoang.banking.service.EmailService;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.AccessLevel;

@@ -3,6 +3,7 @@ package com.nghoang.banking.service.impl;
 import com.nghoang.banking.dto.TransactionDto;
 import com.nghoang.banking.entity.Transaction;
 import com.nghoang.banking.repository.TransactionRepository;
+import com.nghoang.banking.service.TransactionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Slf4j
-public class TransactionImpl implements TransactionService{
+public class TransactionImpl implements TransactionService {
     TransactionRepository transactionRepository;
     @Override
     public void saveTransaction(TransactionDto transactionDto) {

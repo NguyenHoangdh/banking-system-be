@@ -1,7 +1,7 @@
 package com.nghoang.banking.event.listener;
 
 import com.nghoang.banking.event.event.TransferEmailEvent;
-import com.nghoang.banking.service.impl.EmailService;
+import com.nghoang.banking.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;

@@ -8,6 +8,7 @@ import com.nghoang.banking.exception.ErrorCode;
 import com.nghoang.banking.mapper.RoleMapper;
 import com.nghoang.banking.repository.PermissionRepository;
 import com.nghoang.banking.repository.RoleRepository;
+import com.nghoang.banking.service.RoleService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,7 +21,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl implements RoleService {
     RoleRepository roleRepository;
     RoleMapper roleMapper;
     PermissionRepository permissionRepository;

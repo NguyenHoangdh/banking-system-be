@@ -3,7 +3,7 @@ package com.nghoang.banking.controller;
 import com.nghoang.banking.dto.ApiResponse;
 import com.nghoang.banking.dto.request.PermissionRequest;
 import com.nghoang.banking.dto.response.PermissionResponse;
-import com.nghoang.banking.service.impl.PermissionService;
+import com.nghoang.banking.service.PermissionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

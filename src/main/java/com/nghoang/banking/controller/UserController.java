@@ -5,7 +5,7 @@ import com.nghoang.banking.dto.AccountInfo;
 import com.nghoang.banking.dto.ApiResponse;
 import com.nghoang.banking.dto.request.*;
 import com.nghoang.banking.dto.response.BankResponse;
-import com.nghoang.banking.service.impl.UserService;
+import com.nghoang.banking.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;

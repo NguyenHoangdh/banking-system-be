@@ -12,6 +12,8 @@ import com.nghoang.banking.exception.AppException;
 import com.nghoang.banking.exception.ErrorCode;
 import com.nghoang.banking.repository.InvalidatedTokenRepository;
 import com.nghoang.banking.repository.UserRepository;
+import com.nghoang.banking.service.AuthenticationService;
+import com.nghoang.banking.service.EmailService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -35,7 +37,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
-public class AuthenticationServiceImpl implements AuthenticationService{
+public class AuthenticationServiceImpl implements AuthenticationService {
     final PasswordEncoder passwordEncoder;
     final UserRepository userRepository;
     @Value("${jwt.signerKey}")

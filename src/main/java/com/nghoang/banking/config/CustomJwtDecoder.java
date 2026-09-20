@@ -1,7 +1,7 @@
 package com.nghoang.banking.config;
 
 import com.nghoang.banking.dto.request.IntrospectRequest;
-import com.nghoang.banking.service.impl.AuthenticationService;
+import com.nghoang.banking.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;

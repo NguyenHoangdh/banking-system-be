@@ -7,6 +7,7 @@ import com.nghoang.banking.exception.AppException;
 import com.nghoang.banking.exception.ErrorCode;
 import com.nghoang.banking.mapper.PermissionMapper;
 import com.nghoang.banking.repository.PermissionRepository;
+import com.nghoang.banking.service.PermissionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,7 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class PermissionServiceImpl implements PermissionService{
+public class PermissionServiceImpl implements PermissionService {
     PermissionRepository permissionRepository;
     PermissionMapper permissionMapper;
     @PreAuthorize("hasRole('ADMIN')")

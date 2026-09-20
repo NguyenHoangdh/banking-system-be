@@ -3,6 +3,7 @@ package com.nghoang.banking.service.impl;
 import com.nghoang.banking.dto.EmailDetails;
 import com.nghoang.banking.exception.AppException;
 import com.nghoang.banking.exception.ErrorCode;
+import com.nghoang.banking.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AccessLevel;
@@ -23,7 +24,7 @@ import java.io.File;
 @Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EmailServiceImpl implements EmailService{
+public class EmailServiceImpl implements EmailService {
     final JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")

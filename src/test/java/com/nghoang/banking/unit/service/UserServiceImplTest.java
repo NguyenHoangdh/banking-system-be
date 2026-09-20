@@ -12,7 +12,7 @@ import com.nghoang.banking.exception.ErrorCode;
 import com.nghoang.banking.mapper.UserMapper;
 import com.nghoang.banking.repository.RoleRepository;
 import com.nghoang.banking.repository.UserRepository;
-import com.nghoang.banking.service.impl.TransactionService;
+import com.nghoang.banking.service.TransactionService;
 import com.nghoang.banking.service.impl.UserServiceImpl;
 import com.nghoang.banking.utils.AccountUtils;
 import lombok.AccessLevel;

@@ -1,4 +1,4 @@
-package com.nghoang.banking.service.impl;
+package com.nghoang.banking.service;
 
 import com.nghoang.banking.dto.request.RoleRequest;
 import com.nghoang.banking.dto.response.RoleResponse;

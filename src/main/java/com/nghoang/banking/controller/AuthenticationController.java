@@ -6,7 +6,7 @@ import com.nghoang.banking.dto.response.AuthenticationResponse;
 import com.nghoang.banking.dto.request.LoginRequest;
 import com.nghoang.banking.dto.request.LogoutRequest;
 import com.nghoang.banking.dto.response.IntrospectResponse;
-import com.nghoang.banking.service.impl.AuthenticationService;
+import com.nghoang.banking.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
